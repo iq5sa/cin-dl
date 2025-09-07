@@ -1,81 +1,89 @@
-# Cinemana Downloader (Node.js CLI)
+# 🎬 Cinemana Downloader (Node.js CLI)
 
-Download Cinemana videos (by **movie/episode ID**) and all available subtitles using the official Android API endpoints you already shared.
+A command-line tool to download videos and subtitles from Cinemana’s Android API.
 
-- Uses exactly these three endpoints:
-    - `GET /android/allVideoInfo/id/{movieId}`
-    - `GET /android/transcoddedFiles/id/{movieId}`
-    - `GET /android/translationFiles/id/{movieId}`
-- Picks a target **quality** (`mp4-1080`, `mp4-720`, etc.) or falls back to highest
-- Downloads all subtitle tracks (SRT/VTT)
-- Episode-aware filenames: `Show.S03E01.mp4-1080.mp4`
-- Optional series folders: `Show/S03/<files>`
-- Retries + progress bars
-- Optional `ffmpeg` steps: `--mux-subs` or `--burn-subs`
-
-> **Note**  
-> This tool assumes your endpoints are accessible without authentication (as demonstrated). If your deployment needs headers/cookies, you can add them in one place (the Axios client).
+Supports:
+- 🎥 Single movies or episodes (`--movie`)
+- 📺 Full series discovery by **episode id** (`--from-video`) or **root series id** (`--series`)
+- 📂 Organized folders `Show/Sxx/Show.SxxEyy.mp4`
+- 🌐 Multiple qualities (`mp4-1080`, `mp4-720`, etc.)
+- 📝 Subtitles (SRT / VTT), filter by language/format
+- 🔧 Extras:
+    - `--mux-subs` → attach subs (MKV, no re-encode)
+    - `--burn-subs` → burn first sub (re-encode)
+    - `--dry-run` → preview plan without downloading
+    - Retry, progress bars, concurrency
 
 ---
 
-## Requirements
-
-- Node.js 18+
-- `ffmpeg` in PATH **only** if you want `--mux-subs` or `--burn-subs`
-
----
-
-## Quick Start
+## 🚀 Quick Start
 
 ```bash
 git clone https://github.com/iq5sa/cinemana-downloader.git
 cd cinemana-downloader
 cp .env.example .env
-npm i
+npm install
 ```
 
 ## Usage
-
 ```bash
-# one episode/movie by ID, auto-pick 1080p (or highest)
+node cinemana-dl.js --help
+```
+Examples:
+```bash
+# 1) Download a single movie by id
 node cinemana-dl.js --movie 25006
 
-# pick a specific quality (uses "name" from transcoddedFiles)
-node cinemana-dl.js --movie 25006 --quality mp4-720
+# 2) Download an ENTIRE series from any episode id
+node cinemana-dl.js --from-video 25006 --structure series
 
-# multiple IDs
+# 3) Only Season 3
+node cinemana-dl.js --from-video 25006 --season 3 --structure series
+
+# 4) By root series id (if API supports root in /videoSeason)
+node cinemana-dl.js --series 3293 --structure series
+
+# 5) Multiple explicit ids
 node cinemana-dl.js --movie 25006 --movie 1243796
 
-# choose output folder
-node cinemana-dl.js --movie 25006 --output ./videos
-
-# keep a tidy series layout: Show/S03/...
-node cinemana-dl.js --movie 25006 --structure series
-
-# attach subs (MKV, no re-encode) or burn first sub (re-encode)
-node cinemana-dl.js --movie 25006 --mux-subs
-node cinemana-dl.js --movie 25006 --burn-subs
+# 6) With Arabic subtitles only (SRT)
+node cinemana-dl.js --movie 25006 --subs ar --subs-format srt
 ```
 
 ## Cli Options
 ```
---base-url       API base URL (default from .env)
---output         Output folder (default from .env)
---movie          Movie/Episode ID (repeatable)
---quality        Preferred quality name (e.g., mp4-1080)
---concurrency    Parallelism across IDs (default 4)
---skip-existing  Skip files that already exist
---mux-subs       Mux all subtitles into MKV (needs ffmpeg)
---burn-subs      Burn first subtitle into video (needs ffmpeg)
---structure      Output layout: flat | series (default: flat)
---help           Show help
+  --base-url       API base URL (default from .env)
+  --output         Output folder (default from .env)
+  --movie          Movie/Episode id(s)
+  --from-video     Episode id(s) → expand to full series
+  --series         Root series id(s)
+  --season         Season filter(s) when using --from-video / --series
+  --ids-file       File with ids (one per line)
+  --quality        Preferred quality (default: mp4-1080)
+  --concurrency    Concurrent downloads (default: 4)
+  --skip-existing  Skip already existing files
+  --subs           Comma-separated subtitle languages (e.g. ar,en)
+  --subs-format    Subtitle format: srt | vtt | both
+  --mux-subs       Attach subs into MKV (ffmpeg, no re-encode)
+  --burn-subs      Burn first subtitle (ffmpeg re-encode)
+  --structure      flat | series (default: flat)
+  --dry-run        Plan only (no downloads)
+  --name-template  Filename template, e.g. "{title}.S{season}E{episode}.{quality}"
+
 ```
 
 ## Configuration
 .env keys:
-```
+```env
 BASE_URL=https://cinemana.shabakaty.com
 OUTPUT_DIR=downloads
 DEFAULT_QUALITY=mp4-1080
 CONCURRENCY=4
+
+# Optional advanced discovery
+# SERIES_EP_ENDPOINT=/android/seriesEpisodes/id/{seriesId}
+# SERIES_EP_SEASON_PARAM=season
+# DISCOVER_LANGS=ar,en
+# DISCOVER_LEVELS=0,1,2,3
+
 ```
