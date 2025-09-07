@@ -1,13 +1,15 @@
 {
-  "name": "cinemana-downloader",
+  "name": "cin-dl",
   "version": "1.0.0",
   "type": "module",
+  "description": "cin-dl: Download Cinemana videos & subtitles (movies, episodes, full series).",
   "bin": {
-    "cinemana-dl": "./cinemana-dl.js"
+    "cin-dl": "./cin-dl.js"
   },
   "scripts": {
-    "start": "node cinemana-dl.js --help"
+    "start": "node cin-dl.js --help"
   },
+  "license": "MIT",
   "dependencies": {
     "axios": "^1.7.2",
     "cli-progress": "^3.12.0",

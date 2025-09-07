@@ -1,53 +1,45 @@
-# 🎬 Cinemana Downloader (Node.js CLI)
+# 🎬 cin-dl
 
-A command-line tool to download videos and subtitles from Cinemana’s Android API.
+`cin-dl` is a command-line downloader for Cinemana’s Android API.
 
-Supports:
-- 🎥 Single movies or episodes (`--movie`)
-- 📺 Full series discovery by **episode id** (`--from-video`) or **root series id** (`--series`)
-- 📂 Organized folders `Show/Sxx/Show.SxxEyy.mp4`
-- 🌐 Multiple qualities (`mp4-1080`, `mp4-720`, etc.)
-- 📝 Subtitles (SRT / VTT), filter by language/format
-- 🔧 Extras:
-    - `--mux-subs` → attach subs (MKV, no re-encode)
-    - `--burn-subs` → burn first sub (re-encode)
-    - `--dry-run` → preview plan without downloading
-    - Retry, progress bars, concurrency
+Features:
+- Movies, episodes, and full-series downloads
+- Subtitles (SRT/VTT)
+- Organized folder structure (Show/Sxx/Eyy)
+- Quality selection (1080p, 720p…)
+- Mux/burn subtitles with ffmpeg
+- Retry, auto-filter, concurrency, dry-run
 
----
-
-## 🚀 Quick Start
-
+## Install
 ```bash
-git clone https://github.com/iq5sa/cinemana-downloader.git
-cd cinemana-downloader
-cp .env.example .env
+git clone https://github.com/iq5sa/cin-dl.git
+cd cin-dl
 npm install
-```
+
 
 ## Usage
 ```bash
-node cinemana-dl.js --help
+node cin-dl.js --help
 ```
 Examples:
 ```bash
 # 1) Download a single movie by id
-node cinemana-dl.js --movie 25006
+node cin-dl.js --movie 25006
 
 # 2) Download an ENTIRE series from any episode id
-node cinemana-dl.js --from-video 25006 --structure series
+node cin-dl.js --from-video 25006 --structure series
 
 # 3) Only Season 3
-node cinemana-dl.js --from-video 25006 --season 3 --structure series
+node cin-dl.js --from-video 25006 --season 3 --structure series
 
 # 4) By root series id (if API supports root in /videoSeason)
-node cinemana-dl.js --series 3293 --structure series
+node cin-dl.js --series 3293 --structure series
 
 # 5) Multiple explicit ids
-node cinemana-dl.js --movie 25006 --movie 1243796
+node cin-dl.js --movie 25006 --movie 1243796
 
 # 6) With Arabic subtitles only (SRT)
-node cinemana-dl.js --movie 25006 --subs ar --subs-format srt
+node cin-dl.js --movie 25006 --subs ar --subs-format srt
 ```
 
 ## Cli Options
