@@ -1,7 +1,7 @@
 ---
 name: Pull Request
 about: Pull Request
-title: ''
+title: '"[PULL_REQUEST] "'
 labels: ''
 assignees: ''
 
