@@ -59,7 +59,7 @@ const ENV = {
   DISCOVER_LANGS: process.env.DISCOVER_LANGS || "ar,en",
   DISCOVER_LEVELS: process.env.DISCOVER_LEVELS || "0,1,2,3",
   USER_AGENT: process.env.USER_AGENT ||
-    "cin-dl/1.0 (+https://jodx.dev; Node.js)"
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"
 };
 
 const LOG_LEVELS = { error: 0, warn: 1, info: 2, debug: 3 };
@@ -82,7 +82,7 @@ const argv = yargs(hideBin(process.argv))
   .option("base-url", {
     type: "string",
     default: ENV.BASE_URL,
-    describe: "API base, e.g., https://cinemana.shabakaty.com",
+    describe: "API base, e.g., https://cinemana.shabakaty.com/api",
     demandOption: !ENV.BASE_URL
   })
   .option("output", {

@@ -5,7 +5,8 @@ yarn.lock
 pnpm-lock.yaml
 package-lock.json
 .idea/
-
+cin-dl-tests/
+tmp/
 # OS
 .DS_Store
 
@@ -13,3 +14,6 @@ package-lock.json
 .env
 downloads/
 videos/
+README-tests.md
+mock-server.js
+test-matrix.sh
